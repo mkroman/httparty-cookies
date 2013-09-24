@@ -3,7 +3,7 @@
 
 Gem::Specification.new do |spec|
   spec.name     = "httparty-cookies"
-  spec.version  = "0.1"
+  spec.version  = "0.1.1"
   spec.summary  = "What does every party need? Cookies!"
 
   spec.homepage = "https://github.com/mkroman/httparty-cookies"
@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.files    = Dir['library/**/*.rb']
 
   spec.add_dependency "httparty"
-  spec.add_dependency "cookiejar"
+  spec.add_dependency "http-cookie"
 	spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard"
 

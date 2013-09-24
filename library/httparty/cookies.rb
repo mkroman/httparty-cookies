@@ -1,19 +1,21 @@
 # encoding: utf-8
 
 require 'httparty'
-require 'cookiejar'
+require 'http-cookie'
 
 module HTTParty
   module Cookies
     def self.included base
+      # Include HTTParty first
       base.send :include, HTTParty
       base.extend ClassMethods
       base.send :mattr_inheritable, :cookie_jar
-      base.instance_variable_set :@cookie_jar, CookieJar::Jar.new
+
+      # Create a new cookie jar
+      base.instance_variable_set :@cookie_jar, HTTP::CookieJar.new
     end
 
     module ClassMethods
-    private
       def perform_request http_method, path, options, &block
         options = default_options.dup.merge options
 
@@ -22,10 +24,10 @@ module HTTParty
         response = request.perform(&block)
 
         # Read cookies from the headers.
-        response.headers.get_fields('Set-Cookie').each do |cookie|
+        response.headers.get_fields('set-cookie').each do |value|
           uri = response.uri || response.request.uri
 
-          @cookie_jar.set_cookie uri, cookie
+          @cookie_jar.parse value, uri
         end
 
         response
@@ -33,7 +35,7 @@ module HTTParty
 
       # Add cookies from the cookie jar.
       def process_cookies request
-        cookie_header = @cookie_jar.get_cookie_header request.uri
+        cookie_header = HTTP::Cookie.cookie_value @cookie_jar.cookies request.uri
 
         unless cookie_header.empty?
           request.options[:headers] ||= {}

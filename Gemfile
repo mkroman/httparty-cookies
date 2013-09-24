@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "httparty"
-gem "cookiejar"
+gem "http-cookie"
 
 group :development do
   gem "rspec"

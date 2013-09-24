@@ -12,7 +12,7 @@ describe HTTParty::Cookies do
     end
 
     it "should create a cookie jar" do
-      @klass.cookie_jar.should be_kind_of CookieJar::Jar
+      @klass.cookie_jar.should be_kind_of HTTP::CookieJar
     end
   end
 
@@ -21,7 +21,7 @@ describe HTTParty::Cookies do
 
     before :each do
       # @klass.follow_redirects false
-      @klass.cookie_jar.set_cookie uri, "ABC=DEF; Path=/"
+      @klass.cookie_jar.parse "ABC=DEF; Path=/", uri
     end
   end
 end
