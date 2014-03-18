@@ -24,11 +24,12 @@ module HTTParty
         response = request.perform(&block)
 
         # Read cookies from the headers.
-        response.headers.get_fields('set-cookie').each do |value|
+        c = response.headers.get_fields('set-cookie')
+        c.each do |value|
           uri = response.uri || response.request.uri
 
           @cookie_jar.parse value, uri
-        end
+        end unless c.nil?
 
         response
       end
@@ -39,7 +40,7 @@ module HTTParty
 
         unless cookie_header.empty?
           request.options[:headers] ||= {}
-          request.options[:headers]["cookies"] = cookie_header
+          request.options[:headers]["cookie"] = cookie_header
         end
       end
     end
